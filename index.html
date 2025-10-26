@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aeternum Conclave — The Chosen Few</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --carbon: #0F0F10;
+            --platinum: #E8E8E8;
+            --gold: #B89D46;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--platinum);
+            font-family: 'Helvetica Neue', 'Arial', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            width: 8px;
+            height: 8px;
+            background: var(--platinum);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: transform 0.15s ease;
+        }
+
+        #cursor.hover {
+            transform: scale(2);
+        }
+
+        /* Typography */
+        .hero-text {
+            font-size: clamp(48px, 8vw, 140px);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            line-height: 1.1;
+        }
+
+        .subhead {
+            font-size: clamp(24px, 3vw, 40px);
+            letter-spacing: 0.08em;
+        }
+
+        .body-text {
+            font-size: clamp(16px, 1.5vw, 20px);
+            letter-spacing: 0.05em;
+            line-height: 1.6;
+        }
+
+        .micro-text {
+            font-size: 12px;
+            letter-spacing: 0.1em;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        #hero {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        #logo path {
+            stroke: var(--platinum);
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 3s ease forwards 0.5s;
+        }
+
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 1.5s ease forwards 2s;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 3rem;
+            padding: 0.5rem 0;
+            color: var(--platinum);
+            text-decoration: none;
+            border-bottom: 1px solid var(--platinum);
+            letter-spacing: 0.15em;
+            transition: all 0.6s ease;
+        }
+
+        .cta:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: pulse 2s ease infinite 3s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Purpose Section */
+        .purpose-frame {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1.2s ease;
+        }
