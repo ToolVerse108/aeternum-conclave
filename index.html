@@ -12,35 +12,60 @@
         }
 
         :root {
-            --black: #000000;
-            --carbon: #0F0F10;
-            --platinum: #E8E8E8;
-            --gold: #B89D46;
+            --black: #0a0a0a;
+            --carbon: #1a1a1a;
+            --platinum: #d4c5a9;
+            --gold: #c9a961;
+            --dark-gold: #8b7355;
         }
 
         body {
-            background: var(--black);
+            background: #000000;
+            background-image: 
+                radial-gradient(ellipse at top, rgba(201, 169, 97, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(139, 115, 85, 0.02) 0%, transparent 50%);
             color: var(--platinum);
             font-family: 'Helvetica Neue', 'Arial', sans-serif;
             overflow-x: hidden;
             cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(201, 169, 97, 0.03) 0px, transparent 2px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(201, 169, 97, 0.03) 0px, transparent 2px, transparent 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 2;
         }
 
         /* Custom Cursor */
         #cursor {
             width: 8px;
             height: 8px;
-            background: var(--platinum);
+            background: var(--gold);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            mix-blend-mode: difference;
+            box-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
             transition: transform 0.15s ease;
         }
 
         #cursor.hover {
             transform: scale(2);
+            background: var(--platinum);
         }
 
         /* Typography */
@@ -89,6 +114,7 @@
             margin-bottom: 4rem;
             opacity: 0;
             animation: fadeIn 2s ease forwards;
+            filter: drop-shadow(0 0 20px rgba(201, 169, 97, 0.3));
         }
 
         @keyframes fadeIn {
@@ -96,8 +122,8 @@
         }
 
         #logo path {
-            stroke: var(--platinum);
-            stroke-width: 1;
+            stroke: var(--gold);
+            stroke-width: 2;
             fill: none;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
@@ -126,16 +152,18 @@
             display: inline-block;
             margin-top: 3rem;
             padding: 0.5rem 0;
-            color: var(--platinum);
+            color: var(--gold);
             text-decoration: none;
-            border-bottom: 1px solid var(--platinum);
+            border-bottom: 1px solid var(--gold);
             letter-spacing: 0.15em;
             transition: all 0.6s ease;
+            text-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
         }
 
         .cta:hover {
-            color: var(--gold);
-            border-color: var(--gold);
+            color: var(--platinum);
+            border-color: var(--platinum);
+            text-shadow: 0 0 15px rgba(212, 197, 169, 0.5);
         }
 
         .scroll-cue {
@@ -145,6 +173,10 @@
             transform: translateX(-50%);
             opacity: 0;
             animation: pulse 2s ease infinite 3s;
+        }
+
+        .scroll-cue svg path {
+            stroke: var(--gold);
         }
 
         @keyframes pulse {
@@ -162,3 +194,690 @@
             transform: translateY(80px);
             transition: all 1.2s ease;
         }
+
+        .purpose-frame.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .purpose-statement {
+            text-align: center;
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .purpose-underline {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            box-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+            transition: all 1s ease 0.5s;
+        }
+
+        .purpose-frame.visible .purpose-underline {
+            width: 300px;
+            left: calc(50% - 150px);
+        }
+
+        /* Legends Grid */
+        #legends {
+            flex-direction: column;
+            padding: 6rem 2rem;
+        }
+
+        .legends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin-top: 4rem;
+        }
+
+        .symbol {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            background: rgba(26, 26, 26, 0.8);
+            cursor: pointer;
+            transition: all 0.6s ease;
+            position: relative;
+            color: var(--dark-gold);
+        }
+
+        .symbol:hover {
+            transform: scale(1.1) translateZ(20px);
+            box-shadow: 0 0 40px rgba(201, 169, 97, 0.4);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 600px;
+            padding: 4rem;
+            text-align: center;
+            border: 1px solid var(--gold);
+            background: rgba(26, 26, 26, 0.95);
+            box-shadow: 0 0 50px rgba(201, 169, 97, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.5s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-symbol {
+            font-size: 96px;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(201, 169, 97, 0.5);
+        }
+
+        .close-modal {
+            margin-top: 2rem;
+            padding: 0.5rem 2rem;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            transition: all 0.4s ease;
+        }
+
+        .close-modal:hover {
+            background: var(--gold);
+            color: var(--black);
+            box-shadow: 0 0 20px rgba(201, 169, 97, 0.5);
+        }
+
+        /* Ascension Protocol */
+        #ascension {
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ascension-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4rem;
+            margin: 4rem 0;
+            padding: 2rem;
+        }
+
+        .ascension-level {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            opacity: 0.3;
+            transition: all 0.8s ease;
+        }
+
+        .ascension-level.unlocked {
+            opacity: 1;
+        }
+
+        .ascension-circle {
+            width: 140px;
+            height: 140px;
+            border: 2px solid rgba(201, 169, 97, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 10, 0.9);
+            position: relative;
+            transition: all 0.8s ease;
+        }
+
+        .ascension-level.unlocked .ascension-circle {
+            border-color: var(--gold);
+            box-shadow: 0 0 40px rgba(201, 169, 97, 0.5), inset 0 0 30px rgba(201, 169, 97, 0.1);
+            background: radial-gradient(circle, rgba(201, 169, 97, 0.15) 0%, rgba(10, 10, 10, 0.9) 100%);
+        }
+
+        .circle-content {
+            text-align: center;
+        }
+
+        .level-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--carbon);
+            transition: color 0.8s ease;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .ascension-level.unlocked .level-number {
+            color: var(--gold);
+        }
+
+        .level-name {
+            font-size: 13px;
+            letter-spacing: 0.15em;
+            color: var(--platinum);
+            transition: color 0.8s ease;
+        }
+
+        .ascension-level.unlocked .level-name {
+            color: var(--gold);
+        }
+
+        .level-description {
+            max-width: 300px;
+            text-align: left;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            line-height: 1.6;
+            color: var(--platinum);
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.8s ease 0.3s;
+        }
+
+        .ascension-level.unlocked .level-description {
+            opacity: 0.8;
+            transform: translateX(0);
+        }
+
+        .connector-line {
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(201, 169, 97, 0.6), rgba(139, 115, 85, 0.3));
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
+        }
+
+        /* Particle System */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleRise 2s ease forwards;
+        }
+
+        @keyframes particleRise {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0);
+            }
+        }
+
+        /* VIP Chamber */
+        #chamber {
+            background: radial-gradient(circle at center, rgba(26, 26, 26, 0.8) 0%, #000000 100%);
+            animation: chamberRotate 120s linear infinite;
+            position: relative;
+        }
+
+        #chamber::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 50%, rgba(201, 169, 97, 0.05) 0%, transparent 50%);
+            animation: chamberPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes chamberRotate {
+            from { background-position: 0 0; }
+            to { background-position: 360px 360px; }
+        }
+
+        @keyframes chamberPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .pulse-orb {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            animation: orbPulse 3s ease-in-out infinite;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 60px rgba(201, 169, 97, 0.6);
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.6;
+                box-shadow: 0 0 60px rgba(201, 169, 97, 0.6);
+            }
+            50% { 
+                transform: scale(1.1); 
+                opacity: 1;
+                box-shadow: 0 0 80px rgba(201, 169, 97, 0.8);
+            }
+        }
+
+        .principle-modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 26, 26, 0.98);
+            padding: 3rem;
+            border: 1px solid var(--gold);
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(201, 169, 97, 0.4);
+            z-index: 3;
+        }
+
+        .principle-modal.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(201, 169, 97, 0.2);
+        }
+
+        .encrypted-link {
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(201, 169, 97, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .encrypted-link:hover {
+            border-color: var(--gold);
+            color: var(--platinum);
+            text-shadow: 0 0 10px rgba(201, 169, 97, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .legends-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            .symbol {
+                width: 100px;
+                height: 100px;
+                font-size: 48px;
+            }
+
+            .ascension-level {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .level-description {
+                text-align: center;
+                max-width: 280px;
+            }
+
+            .ascension-circle {
+                width: 120px;
+                height: 120px;
+            }
+
+            .connector-line {
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <svg id="logo" viewBox="0 0 200 200">
+            <path d="M100,20 L180,100 L100,180 L20,100 Z M60,100 L100,60 L140,100 L100,140 Z" />
+        </svg>
+        
+        <div class="hero-content">
+            <h1 class="hero-text">EVOLUTION IS NOT PUBLIC</h1>
+            <p class="body-text" style="margin-top: 2rem;">A private intellectual society for those building the future.</p>
+            <a href="#" class="cta body-text">REQUEST CONSIDERATION</a>
+        </div>
+        
+        <div class="scroll-cue">
+            <svg width="24" height="48" viewBox="0 0 24 48">
+                <path stroke="var(--gold)" stroke-width="1" fill="none" d="M12,8 L12,32 M12,32 L8,28 M12,32 L16,28" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Purpose Section -->
+    <div id="purpose">
+        <div class="purpose-frame">
+            <div class="purpose-statement">
+                <h2 class="hero-text">WE REDEFINE<br>INTELLIGENCE</h2>
+                <div class="purpose-underline"></div>
+            </div>
+        </div>
+        
+        <div class="purpose-frame">
+            <div class="purpose-statement">
+                <h2 class="hero-text">WE PREPARE<br>FUTURE-RELEVANT<br>HUMANS</h2>
+                <div class="purpose-underline"></div>
+            </div>
+        </div>
+        
+        <div class="purpose-frame">
+            <div class="purpose-statement">
+                <h2 class="hero-text">WE HONOR ACTION<br>NOT OPINION</h2>
+                <div class="purpose-underline"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legends Grid -->
+    <section id="legends">
+        <h2 class="subhead">THE ARCHETYPES</h2>
+        <div class="legends-grid">
+            <div class="symbol" data-archetype="thinker">⌁</div>
+            <div class="symbol" data-archetype="innovator">∆</div>
+            <div class="symbol" data-archetype="visionary">∷</div>
+            <div class="symbol" data-archetype="architect">◬</div>
+            <div class="symbol" data-archetype="catalyst">⚡</div>
+            <div class="symbol" data-archetype="guardian">◉</div>
+            <div class="symbol" data-archetype="sage">⊙</div>
+            <div class="symbol" data-archetype="warrior">⚔</div>
+            <div class="symbol" data-archetype="oracle">☋</div>
+            <div class="symbol" data-archetype="weaver">⧈</div>
+            <div class="symbol" data-archetype="phoenix">⟁</div>
+            <div class="symbol" data-archetype="nexus">⎔</div>
+        </div>
+    </section>
+
+    <!-- Ascension Protocol -->
+    <section id="ascension">
+        <h2 class="subhead">ASCENSION PROTOCOL</h2>
+        <div class="ascension-container">
+            <div class="ascension-level" data-level="1">
+                <div class="ascension-circle">
+                    <div class="circle-content">
+                        <span class="level-number">I</span>
+                        <span class="level-name">SEEKER</span>
+                    </div>
+                </div>
+                <div class="level-description">
+                    The awakening. Recognition that conventional paths lead to conventional outcomes.
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <div class="ascension-level" data-level="2">
+                <div class="ascension-circle">
+                    <div class="circle-content">
+                        <span class="level-number">II</span>
+                        <span class="level-name">SCHOLAR</span>
+                    </div>
+                </div>
+                <div class="level-description">
+                    Deep study of systems, patterns, and principles that govern reality.
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <div class="ascension-level" data-level="3">
+                <div class="ascension-circle">
+                    <div class="circle-content">
+                        <span class="level-number">III</span>
+                        <span class="level-name">INNOVATOR</span>
+                    </div>
+                </div>
+                <div class="level-description">
+                    Application of knowledge. Creating what has never existed before.
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <div class="ascension-level" data-level="4">
+                <div class="ascension-circle">
+                    <div class="circle-content">
+                        <span class="level-number">IV</span>
+                        <span class="level-name">VISIONARY</span>
+                    </div>
+                </div>
+                <div class="level-description">
+                    Shaping future trajectories. Influence that extends beyond immediate reach.
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <div class="ascension-level" data-level="5">
+                <div class="ascension-circle">
+                    <div class="circle-content">
+                        <span class="level-number">V</span>
+                        <span class="level-name">THE CIRCLE</span>
+                    </div>
+                </div>
+                <div class="level-description">
+                    The apex. Reserved for those who transcend individual achievement.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIP Chamber -->
+    <section id="chamber">
+        <h2 class="subhead" style="position: absolute; top: 10%;">THE CIRCLE</h2>
+        <div class="pulse-orb" id="orbTrigger"></div>
+        <div class="principle-modal" id="principleModal">
+            <p class="body-text">"The extraordinary require no validation from the ordinary."</p>
+            <button class="close-modal" onclick="closePrinciple()">UNDERSTOOD</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p class="micro-text">SILENCE PROTECTS THE EXTRAORDINARY</p>
+        <a href="#" class="encrypted-link micro-text" style="margin-top: 1rem; display: inline-block;">ENCRYPTED CONTACT</a>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-symbol" id="modalSymbol"></div>
+            <h3 class="subhead" id="modalTitle"></h3>
+            <p class="body-text" id="modalText" style="margin-top: 1.5rem;"></p>
+            <button class="close-modal" onclick="closeModal()">CLOSE</button>
+        </div>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Cursor hover effect
+        const interactives = document.querySelectorAll('a, button, .symbol, .pulse-orb');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Archetype data
+        const archetypes = {
+            thinker: { title: '⌁ — THE THINKER', text: 'Question everything. The foundation of wisdom is relentless inquiry.' },
+            innovator: { title: '∆ — THE INNOVATOR', text: 'Invent what doesn\'t exist. The future belongs to creators.' },
+            visionary: { title: '∷ — THE VISIONARY', text: 'See beyond the horizon. Vision precedes all revolution.' },
+            architect: { title: '◬ — THE ARCHITECT', text: 'Design systems that transcend time. Build with permanence.' },
+            catalyst: { title: '⚡ — THE CATALYST', text: 'Accelerate transformation. Change is not passive.' },
+            guardian: { title: '◉ — THE GUARDIAN', text: 'Protect what matters. Preservation requires strength.' },
+            sage: { title: '⊙ — THE SAGE', text: 'Wisdom through experience. Knowledge without action is hollow.' },
+            warrior: { title: '⚔ — THE WARRIOR', text: 'Execute with precision. Discipline separates dreamers from doers.' },
+            oracle: { title: '☋ — THE ORACLE', text: 'Anticipate patterns. The future reveals itself to those who observe.' },
+            weaver: { title: '⧈ — THE WEAVER', text: 'Connect disparate threads. Synthesis creates new realities.' },
+            phoenix: { title: '⟁ — THE PHOENIX', text: 'Rise from failure. Transformation requires destruction.' },
+            nexus: { title: '⎔ — THE NEXUS', text: 'Bridge worlds. True power lies in connection.' }
+        };
+
+        // Symbol click handler
+        document.querySelectorAll('.symbol').forEach(symbol => {
+            symbol.addEventListener('click', function() {
+                const type = this.dataset.archetype;
+                const data = archetypes[type];
+                
+                document.getElementById('modalSymbol').textContent = this.textContent;
+                document.getElementById('modalTitle').textContent = data.title;
+                document.getElementById('modalText').textContent = data.text;
+                document.getElementById('modal').classList.add('active');
+                
+                playChime();
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Purpose frames scroll reveal
+        const purposeFrames = document.querySelectorAll('.purpose-frame');
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        purposeFrames.forEach(frame => observer.observe(frame));
+
+        // Ascension unlock on scroll
+        let ascensionUnlocked = false;
+        const ascensionSection = document.getElementById('ascension');
+        const levels = document.querySelectorAll('.ascension-level');
+
+        const ascensionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !ascensionUnlocked) {
+                    ascensionUnlocked = true;
+                    unlockAscension();
+                }
+            });
+        }, { threshold: 0.3 });
+
+        ascensionObserver.observe(ascensionSection);
+
+        function unlockAscension() {
+            levels.forEach((level, index) => {
+                setTimeout(() => {
+                    level.classList.add('unlocked');
+                    const circle = level.querySelector('.ascension-circle');
+                    createParticles(circle);
+                    playChime();
+                }, index * 800);
+            });
+        }
+
+        function createParticles(element) {
+            const rect = element.getBoundingClientRect();
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = (rect.left + rect.width / 2) + 'px';
+                particle.style.top = (rect.top + rect.height / 2) + 'px';
+                particle.style.animationDelay = (Math.random() * 0.5) + 's';
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 2000);
+            }
+        }
+
+        // VIP Chamber principle reveal
+        document.getElementById('orbTrigger').addEventListener('click', function() {
+            document.getElementById('principleModal').classList.add('active');
+            playChime();
+        });
+
+        function closePrinciple() {
+            document.getElementById('principleModal').classList.remove('active');
+        }
+
+        // Audio placeholders
+        function playChime() {
+            // Placeholder for chime sound
+            console.log('🔔 Chime played');
+        }
+
+        // Ambient hum (would be actual audio file)
+        function initAmbientSound() {
+            console.log('🎵 Ambient hum initialized');
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initAmbientSound();
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
