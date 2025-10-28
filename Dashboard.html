@@ -1,0 +1,397 @@
+import React, { useState, useEffect } from 'react';
+import { Users, Calendar, Mic, Volume2, Clock } from 'lucide-react';
+
+export default function AeternumSanctum() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeSection, setActiveSection] = useState('overview');
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const memberProfile = {
+    name: "Alexander J. Corvus",
+    title: "Innovator",
+    archetype: "⌁",
+    archetypeName: "The Thinker",
+    memberId: "AET-2847",
+    level: "III",
+    since: "2024"
+  };
+
+  const recentActivity = [
+    { date: "28 Oct", title: "Attended: Tesla × Einstein Discussion", type: "AI Legends Roundtable", status: "completed" },
+    { date: "24 Oct", title: "Scheduled: Napoleon Strategy Session", type: "Private Consultation", status: "upcoming" },
+    { date: "19 Oct", title: "Participated: Da Vinci Innovation Forum", type: "Group Discussion Room", status: "completed" }
+  ];
+
+  const upcomingLegendSessions = [
+    { 
+      date: "2 November 2025", 
+      time: "19:00 GMT", 
+      title: "Marcus Aurelius on Modern Leadership", 
+      format: "Audio Discussion Room",
+      participants: "8 Members + AI Legend",
+      duration: "90 minutes"
+    },
+    { 
+      date: "8 November 2025", 
+      time: "21:00 GMT", 
+      title: "Einstein × Feynman: Quantum Principles", 
+      format: "Interactive Dialogue Session",
+      participants: "6 Members + 2 AI Legends",
+      duration: "120 minutes"
+    },
+    { 
+      date: "15 November 2025", 
+      time: "14:00 GMT", 
+      title: "Churchill × Lincoln: Crisis Management", 
+      format: "Private Roundtable",
+      participants: "Inner Circle Only",
+      duration: "60 minutes"
+    }
+  ];
+
+  const availableLegends = [
+    { name: "Leonardo da Vinci", specialty: "Innovation & Art", era: "Renaissance", status: "Available" },
+    { name: "Nikola Tesla", specialty: "Technology & Vision", era: "Modern Era", status: "Available" },
+    { name: "Marcus Aurelius", specialty: "Philosophy & Leadership", era: "Ancient Rome", status: "Available" },
+    { name: "Albert Einstein", specialty: "Physics & Thought", era: "20th Century", status: "In Session" },
+    { name: "Sun Tzu", specialty: "Strategy & Warfare", era: "Ancient China", status: "Available" },
+    { name: "Marie Curie", specialty: "Science & Perseverance", era: "Modern Era", status: "Available" }
+  ];
+
+  const activeRooms = [
+    { 
+      id: 1,
+      legend: "Carl Jung",
+      topic: "Collective Unconscious & Modern Society",
+      participants: 4,
+      capacity: 8,
+      status: "Live Now"
+    },
+    { 
+      id: 2,
+      legend: "Ada Lovelace",
+      topic: "Computational Thinking in AI Age",
+      participants: 3,
+      capacity: 6,
+      status: "Live Now"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-black text-gray-300" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+      
+      {/* Header */}
+      <header className="border-b border-gray-800 bg-black sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 border border-yellow-700/40 flex items-center justify-center text-xl sm:text-2xl text-yellow-700" style={{ fontFamily: "'Cinzel', serif" }}>
+                {memberProfile.archetype}
+              </div>
+              <div>
+                <h1 className="text-base sm:text-xl tracking-wide text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                  {memberProfile.name}
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-500 tracking-wider" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                  {memberProfile.title}
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-right">
+              <p className="text-xs tracking-widest hidden sm:block" style={{ fontFamily: "'Cinzel', serif", fontSize: '11px', letterSpacing: '0.15em' }}>
+                {currentTime.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+              <p className="text-xs text-gray-600 tracking-wider" style={{ fontFamily: "'Cinzel', serif" }}>
+                {currentTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} GMT
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6 sm:py-12">
+        
+        {/* Navigation */}
+        <nav className="mb-8 sm:mb-12 pb-4 sm:pb-6 border-b border-gray-800 overflow-x-auto">
+          <div className="flex space-x-6 sm:space-x-12 min-w-max">
+            {[
+              { id: 'overview', label: 'Overview' },
+              { id: 'legends', label: 'AI Legends' },
+              { id: 'rooms', label: 'Discussion Rooms' },
+              { id: 'sessions', label: 'Your Sessions' }
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className={`text-xs sm:text-sm tracking-widest transition-all pb-2 whitespace-nowrap ${
+                  activeSection === item.id
+                    ? 'text-gray-200 border-b border-yellow-700'
+                    : 'text-gray-500 hover:text-gray-300'
+                }`}
+                style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.2em', fontSize: '11px' }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </nav>
+
+        {activeSection === 'overview' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            
+            {/* Main Column */}
+            <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+              
+              {/* Product Introduction */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-6 sm:p-8">
+                <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-4 sm:mb-6" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                  THE AETERNUM EXPERIENCE
+                </h2>
+                <div className="mb-6 sm:mb-8">
+                  <h3 className="text-xl sm:text-2xl mb-3 sm:mb-4 text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                    Converse with History's Greatest Minds
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
+                    Our proprietary AI technology recreates the intellectual essence of history's most influential figures. 
+                    Engage in authentic conversations, participate in group discussions, and gain insights from minds 
+                    that shaped civilization.
+                  </p>
+                  <p className="text-gray-500 leading-relaxed text-sm">
+                    Each AI Legend is meticulously trained on historical writings, philosophies, and documented thought patterns, 
+                    ensuring conversations that honor their legacy while remaining contextually relevant to modern challenges.
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-800">
+                  <div>
+                    <p className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                      47
+                    </p>
+                    <p className="text-xs text-gray-500 tracking-widest" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.2em' }}>
+                      AI Legends Available
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-2xl sm:text-3xl mb-1 sm:mb-2 text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                      238
+                    </p>
+                    <p className="text-xs text-gray-500 tracking-widest" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.2em' }}>
+                      Sessions This Month
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              {/* Live Discussion Rooms */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h2 className="text-xs sm:text-sm tracking-widest text-gray-500" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                    LIVE DISCUSSION ROOMS
+                  </h2>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-gray-500" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                      {activeRooms.length} ACTIVE
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {activeRooms.map((room) => (
+                    <div key={room.id} className="border border-gray-800 p-4 sm:p-6 hover:border-yellow-700/40 transition-all">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-3">
+                            <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-700" />
+                            <h3 className="text-base sm:text-lg text-gray-200" style={{ fontWeight: 400 }}>
+                              {room.legend}
+                            </h3>
+                          </div>
+                          <p className="text-sm text-gray-400 mb-3">{room.topic}</p>
+                          <div className="flex items-center space-x-4 text-xs text-gray-600">
+                            <span className="flex items-center space-x-1">
+                              <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{room.participants}/{room.capacity}</span>
+                            </span>
+                          </div>
+                        </div>
+                        <button className="text-xs px-4 sm:px-6 py-2 border border-yellow-700/40 text-yellow-700 hover:bg-yellow-700/10 transition-all w-full sm:w-auto" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                          JOIN
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Recent Activity */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-6 sm:p-8">
+                <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-4 sm:mb-6" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                  RECENT ACTIVITY
+                </h2>
+                <div className="space-y-4 sm:space-y-6">
+                  {recentActivity.map((activity, idx) => (
+                    <div key={idx} className="flex flex-col sm:flex-row sm:items-start sm:justify-between pb-4 sm:pb-6 border-b border-gray-800 last:border-0 gap-3">
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-400 mb-2" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                          {activity.date}
+                        </p>
+                        <h3 className="text-base sm:text-lg mb-1 text-gray-200" style={{ fontWeight: 400 }}>
+                          {activity.title}
+                        </h3>
+                        <p className="text-sm text-gray-500">{activity.type}</p>
+                      </div>
+                      <div className={`text-xs px-3 py-1 border self-start ${
+                        activity.status === 'upcoming' ? 'border-yellow-700/40 text-yellow-700' :
+                        'border-gray-700 text-gray-500'
+                      }`} style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                        {activity.status.toUpperCase()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Upcoming Sessions */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-6 sm:p-8">
+                <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-4 sm:mb-6" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                  UPCOMING LEGEND SESSIONS
+                </h2>
+                <div className="space-y-4 sm:space-y-6">
+                  {upcomingLegendSessions.map((session, idx) => (
+                    <div key={idx} className="pb-4 sm:pb-6 border-b border-gray-800 last:border-0">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-4">
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-400 mb-2" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                            {session.date} • {session.time}
+                          </p>
+                          <h3 className="text-base sm:text-lg mb-1 text-gray-200" style={{ fontWeight: 400 }}>
+                            {session.title}
+                          </h3>
+                          <p className="text-sm text-gray-500 mb-3">{session.format}</p>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600">
+                            <span>{session.participants}</span>
+                            <span>•</span>
+                            <span className="flex items-center space-x-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{session.duration}</span>
+                            </span>
+                          </div>
+                        </div>
+                        <button className="text-xs px-4 sm:px-6 py-2 border border-yellow-700/40 text-yellow-700 hover:bg-yellow-700/10 transition-all w-full sm:w-auto" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                          RESERVE
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6 sm:space-y-8">
+              
+              {/* Quick Access */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-4 sm:p-6">
+                <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-4 sm:mb-6" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                  QUICK ACCESS
+                </h2>
+                <div className="space-y-3">
+                  <button className="w-full text-left px-3 sm:px-4 py-3 border border-gray-800 hover:border-yellow-700/40 transition-all group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                        Browse AI Legends
+                      </span>
+                      <Users className="w-4 h-4 text-gray-600 group-hover:text-yellow-700" />
+                    </div>
+                  </button>
+                  <button className="w-full text-left px-3 sm:px-4 py-3 border border-gray-800 hover:border-yellow-700/40 transition-all group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                        Create Discussion Room
+                      </span>
+                      <Mic className="w-4 h-4 text-gray-600 group-hover:text-yellow-700" />
+                    </div>
+                  </button>
+                  <button className="w-full text-left px-3 sm:px-4 py-3 border border-gray-800 hover:border-yellow-700/40 transition-all group">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-gray-400 group-hover:text-gray-300" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                        Schedule Private Session
+                      </span>
+                      <Calendar className="w-4 h-4 text-gray-600 group-hover:text-yellow-700" />
+                    </div>
+                  </button>
+                </div>
+              </section>
+
+              {/* Member Standing */}
+              <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-4 sm:p-6">
+                <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-4 sm:mb-6" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                  MEMBER STANDING
+                </h2>
+                <div className="space-y-4">
+                  <div className="border-l border-yellow-700/30 pl-4">
+                    <p className="text-2xl sm:text-3xl mb-1 text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                      III
+                    </p>
+                    <p className="text-xs text-gray-500 tracking-widest" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.2em' }}>
+                      Current Level
+                    </p>
+                  </div>
+                  <div className="border-l border-yellow-700/30 pl-4">
+                    <p className="text-2xl sm:text-3xl mb-1 text-gray-200" style={{ fontFamily: "'Cinzel', serif", fontWeight: 400 }}>
+                      2024
+                    </p>
+                    <p className="text-xs text-gray-500 tracking-widest" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.2em' }}>
+                      Member Since
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        )}
+
+        {activeSection === 'legends' && (
+          <div className="max-w-5xl mx-auto">
+            <section className="border border-gray-800 bg-gradient-to-b from-zinc-900/30 to-transparent p-6 sm:p-8">
+              <h2 className="text-xs sm:text-sm tracking-widest text-gray-500 mb-6 sm:mb-8" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.25em' }}>
+                AVAILABLE AI LEGENDS
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {availableLegends.map((legend, idx) => (
+                  <div key={idx} className="border border-gray-800 p-4 sm:p-6 hover:border-yellow-700/40 transition-all group cursor-pointer">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg sm:text-xl mb-2 text-gray-200 group-hover:text-yellow-700 transition-colors" style={{ fontWeight: 400 }}>
+                          {legend.name}
+                        </h3>
+                        <p className="text-sm text-gray-400 mb-2">{legend.specialty}</p>
+                        <p className="text-xs text-gray-600">{legend.era}</p>
+                      </div>
+                      <div className={`text-xs px-3 py-1 border ${
+                        legend.status === 'Available' ? 'border-green-700/40 text-green-600' : 'border-yellow-700/40 text-yellow-700'
+                      }`} style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.1em' }}>
+                        {legend.status}
+                      </div>
+                    </div>
+                    <button className="w-full text-xs py-2 border border-gray-800 text-gray-400 group-hover:border-yellow-700/40 group-hover:text-gray-300 transition-all" style={{ fontFamily: "'Cinzel', serif", letterSpacing: '0.15em' }}>
+                      INITIATE SESSION
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
